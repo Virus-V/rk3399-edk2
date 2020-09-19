@@ -182,6 +182,7 @@
 [PcdsFeatureFlag.common]
   # Use the Vector Table location in CpuDxe. We will not copy the Vector Table at PcdCpuVectorBaseAddress
   gArmTokenSpaceGuid.PcdRelocateVectorTable|FALSE
+  gArmTokenSpaceGuid.PcdArmGicV3WithV2Legacy|FALSE
 
   gEmbeddedTokenSpaceGuid.PcdPrePiProduceMemoryTypeInformationHob|TRUE
 
@@ -293,11 +294,11 @@
   ## Serial Terminal
   DEFINE SERIAL_BASE = 0xFF1A0000 # UART2
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|$(SERIAL_BASE)
-  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|115200
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|1500000
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultDataBits|8
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultParity|0
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultStopBits|1
-  
+
   ## PL031 RealTimeClock
   #gArmPlatformTokenSpaceGuid.PcdPL031RtcBase|0xF8003000
 
@@ -432,9 +433,9 @@
   #
   # ACPI support.
   #
-  MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
-  MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
-  Platform/Rockchip/Rk3399Pkg/AcpiTables/AcpiTables.inf
+  #MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
+  #MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
+  #Platform/Rockchip/Rk3399Pkg/AcpiTables/AcpiTables.inf
 
   #
   # Video.
@@ -482,3 +483,5 @@
       gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
+
+  Platform/Rockchip/Rk3399Pkg/Applications/DebugUEFI/DebugUEFI.inf

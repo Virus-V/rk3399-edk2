@@ -68,11 +68,16 @@ RkI2cLibVirtualNotifyEvent (
   )
 {
   UINT32 BusId;
+  EFI_STATUS Status;
 
   for (BusId = 0; BusId < I2C_BUS_MAX; BusId++) {
     if (gI2cRuntimeBase[BusId] != 0) {
-      EfiConvertPointer (0x0, (VOID **)&gI2cRuntimeBase[BusId]);
-      DEBUG ((EFI_D_INFO, "I2cLibVirtualNotifyEvent: gI2cRuntimeBase[%d]=0x%x\n", BusId, gI2cRuntimeBase[BusId]));
+      Status = EfiConvertPointer (0x0, (VOID **)&gI2cRuntimeBase[BusId]);
+      if (Status != EFI_SUCCESS) {
+        DEBUG ((EFI_D_ERROR, "I2cLibVirtualNotifyEvent: gI2cRuntimeBase[%d]=0x%x convert address failed!\n", BusId, gI2cRuntimeBase[BusId]));
+      } else {
+        DEBUG ((EFI_D_INFO, "I2cLibVirtualNotifyEvent: gI2cRuntimeBase[%d]=0x%x\n", BusId, gI2cRuntimeBase[BusId]));
+      }
     }
   }
 

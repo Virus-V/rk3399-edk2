@@ -47,3 +47,5 @@
 
 [Pcd]
 
+[Depex]
+  gEfiCpuArchProtocolGuid

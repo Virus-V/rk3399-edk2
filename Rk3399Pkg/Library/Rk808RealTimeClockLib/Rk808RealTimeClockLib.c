@@ -403,18 +403,9 @@ LibRtcInitialize (
   )
 {
   EFI_STATUS    Status;
-  EFI_HANDLE    Handle;
-
-
   EFI_TIME      EfiTime;
 
-  // Setup the setters and getters
-  gRT->GetTime       = LibGetTime;
-  gRT->SetTime       = LibSetTime;
-  gRT->GetWakeupTime = LibGetWakeupTime;
-  gRT->SetWakeupTime = LibSetWakeupTime;
-
-  Status = gRT->GetTime (&EfiTime, NULL);
+  Status = LibGetTime (&EfiTime, NULL);
   if(EFI_ERROR (Status) || (EfiTime.Year < 2010) || (EfiTime.Year > 2099)){
       EfiTime.Year          = 2017;
       EfiTime.Month         = 1;
@@ -426,7 +417,7 @@ LibRtcInitialize (
       EfiTime.Daylight      = 0;
       EfiTime.TimeZone      = EFI_UNSPECIFIED_TIMEZONE;
 
-      Status = gRT->SetTime(&EfiTime);
+      Status = LibSetTime(&EfiTime);
       if (EFI_ERROR(Status))
       {
         DEBUG((EFI_D_ERROR, "[%a]:[%dL] Status : %r\n", __FUNCTION__, __LINE__, Status));
@@ -439,14 +430,6 @@ LibRtcInitialize (
   DEBUG((EFI_D_INFO, "EfiTime.Hour=%d\n", EfiTime.Hour));
   DEBUG((EFI_D_INFO, "EfiTime.Minute=%d\n", EfiTime.Minute));
   DEBUG((EFI_D_INFO, "EfiTime.Second=%d\n", EfiTime.Second));
-
-  // Install the protocol
-  Handle = NULL;
-  Status = gBS->InstallMultipleProtocolInterfaces (
-                  &Handle,
-                  &gEfiRealTimeClockArchProtocolGuid,  NULL,
-                  NULL
-                 );
 
   return Status;
 }

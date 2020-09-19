@@ -87,6 +87,7 @@
 #define UART_RECEIVE_FIFO_NOT_EMPTY        (1<<3)
 #define UART_TRANSMIT_FIFO_FULL            (0)
 #define UART_TRANSMIT_FIFO_NOT_FULL        (1<<1)
+#define UART_BUSY                          (1)
 
 /* UART_SFE */
 #define SHADOW_FIFI_ENABLED                (1)
@@ -353,9 +354,10 @@ UartWrite (
   UINT8* CONST Final = &Buffer[NumberOfBytes];
 
   while (Buffer < Final) {
-    do {} while ((MmioRead32(UartBase + UART_USR) & UART_TRANSMIT_FIFO_NOT_FULL) == 0);  
+    while ((MmioRead32(UartBase + UART_USR) & UART_TRANSMIT_FIFO_NOT_FULL) == 0);  
     MmioWrite32(UartBase + UART_THR, *Buffer++);  
   }
+  while((MmioRead32(UartBase + UART_USR) & UART_BUSY) == 1);
 
   return NumberOfBytes;
 }
@@ -381,7 +383,7 @@ UartRead (
   UINTN   Count;
 
   for (Count = 0; Count < NumberOfBytes; Count++, Buffer++) {
-    do {} while ((MmioRead32(UartBase + UART_USR) & UART_RECEIVE_FIFO_NOT_EMPTY) == 0);
+    while ((MmioRead32(UartBase + UART_USR) & UART_RECEIVE_FIFO_NOT_EMPTY) == 0);
     *Buffer = (UINT8)MmioRead32(UartBase + UART_RBR);
   }
 
